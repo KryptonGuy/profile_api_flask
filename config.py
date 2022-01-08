@@ -8,7 +8,7 @@ class Config(object):
         SECRET_KEY = "my_key"
 
     # MySQL Config for Goolge Cloud SQL
-    '''try:
+    try:
         PASSWORD = os.environ.get('PASSWORD')
         PUBLIC_IP_ADDRESS = os.environ.get('PUBLIC_IP_ADDRESS')
         DBNAME = os.environ.get('DBNAME')
@@ -19,4 +19,4 @@ class Config(object):
     except:
         SQLALCHEMY_DATABASE_URI= "mysql+pymysql://root:password@localhost/emp" #local instance URI'''
 
-    SQLALCHEMY_DATABASE_URI= "mysql+pymysql://root:password@localhost/emp" #local instance URI    
+     
