@@ -3,7 +3,6 @@
 A basic REST API using Flask, Flask-RESTful, Flask-Marshmallow, and Flask-SQLAlchemy.
 
 ## Contents
----
 
 
 * [Installation](#installation)
@@ -11,7 +10,6 @@ A basic REST API using Flask, Flask-RESTful, Flask-Marshmallow, and Flask-SQLAlc
 * [Endpoints](#endpoints)
 
 ## Installation
----
 
 ```bash
 make build
@@ -30,7 +28,7 @@ It will shut down all container and remove all images
 
 
 ## Models
----
+
 ### Profile
 
 ```json
@@ -45,7 +43,7 @@ It will shut down all container and remove all images
 * Profile id is autoincremented.
 
 ## Endpoints
----
+
 ### **API** 
 >`GET` "/"
 >
