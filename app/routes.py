@@ -1,4 +1,5 @@
 from datetime import datetime
+from threading import active_count
 from app import app, ma, db, api
 from app.model import ProfileModel
 from flask_restful import Resource
@@ -25,11 +26,7 @@ parser.add_argument('name')
 parser.add_argument('birthdate')
 parser.add_argument('status')
 
-#Parser Arguments for Update
-update = reqparse.RequestParser() 
-update.add_argument('name')
-update.add_argument('birthdate')
-update.add_argument('status')
+
 
 
 resolve_fields = {
@@ -77,8 +74,13 @@ class Profile(Resource):
         args = parser.parse_args()
 
         #if None Arguments
-        if args["name"]==None or args["birthdate"]==None or args["status"]==None:
+        if args["name"]==None or args["birthdate"]==None:
             abort(400)
+
+        #If Status not active or paused
+        if args['status'] != None:
+            if args['status'] not in ("ACTIVE", "PAUSED"):
+                abort(400)
 
         profile = ProfileModel(name=args["name"], birthdate=args["birthdate"], status=args["status"])
         
@@ -98,6 +100,12 @@ class Profile(Resource):
 
     def put(self):
         abort(405)
+
+#Parser Arguments for Update
+update = reqparse.RequestParser() 
+update.add_argument('name')
+update.add_argument('birthdate')
+update.add_argument('status')
 
 class Edit(Resource):
 
@@ -172,7 +180,88 @@ class Edit(Resource):
         
         return {"message": "Profile deleted succesfully"}, 204
 
-@app.route("/")
+
+#For all ACTIVE Profiles
+class Active(Resource):
+
+    #GET request to get all ACTIVE profiles
+    @swagger.operation()
+    def get(self):
+        status = "ACTIVE"
+
+        profile_schema = ProfileSchema()
+        all_profiles = ProfileModel.query.filter_by(status=status)
+        
+        # Dictonary for response
+
+        response = dict()
+        response["created_at"] = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+
+        #if no database is empty
+        if not all_profiles:
+            response['data'] = "No profile exist in the databse"
+            return response, 200
+
+        data = []
+
+        for profile in all_profiles:
+            data.append(profile_schema.dump(profile)) #adding the profile object in Json
+
+        total = len(data)
+        response['data'] = data
+        response['total'] = total
+
+        return response, 200
+
+
+    def post(self):
+        abort(405)   
+
+    def delete(self):
+        abort(405)
+
+
+class Paused(Resource):
+
+    #GET request to get all Paused profiles
+    @swagger.operation()
+    def get(self):
+        status = "PAUSED"
+
+        profile_schema = ProfileSchema()
+        all_profiles = ProfileModel.query.filter_by(status=status)
+        
+        # Dictonary for response
+
+        response = dict()
+        response["created_at"] = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+
+        #if no database is empty
+        if not all_profiles:
+            response['data'] = "No profile exist in the databse"
+            return response, 200
+
+        data = []
+
+        for profile in all_profiles:
+            data.append(profile_schema.dump(profile)) #adding the profile object in Json
+
+        total = len(data)
+        response['data'] = data
+        response['total'] = total
+
+        return response, 200
+
+    @swagger.operation()
+    def POST(self):
+        abort(405)   
+
+    @swagger.operation()
+    def DELETE(self):
+        abort(405) 
+
+#Documenting README file
+@app.route("/doc")
 def index():
     readme_file = open("README.md", "r")
     md_template_string = markdown.markdown(
@@ -182,6 +271,7 @@ def index():
     return md_template_string
 
 
-
 api.add_resource(Profile, '/profiles')
 api.add_resource(Edit, '/profiles/<int:id>')
+api.add_resource(Active, '/profiles/active')
+api.add_resource(Paused, '/profiles/paused')

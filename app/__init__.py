@@ -22,7 +22,7 @@ api = swagger.docs(
 	basePath="http://localhost:5000",
 	resourcePath="/",
 	produces=["application/json"],
-	api_spec_url="/spec",
+	api_spec_url="/",
 	description="API v0 description",
 )
 

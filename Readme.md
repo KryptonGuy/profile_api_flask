@@ -8,7 +8,7 @@ This Flasked Based API used to manage Profiles.
 
 * **URL**
 
-  '/profiles'
+ '/profiles'
 
 * **Method:**
 
