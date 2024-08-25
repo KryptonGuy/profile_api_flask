@@ -1,5 +1,5 @@
 pipeline {
-    agent {label 'python-alpine-linux'}
+    agent {label 'python-alpine'}
     options{
         buildDiscarder(logRotator(numToKeepStr: '5', daysToKeepStr: '5'))
         timestamps()
