@@ -9,13 +9,14 @@ pipeline {
         registry = "yashspam/profile-api"
         registryCredential = 'dockerhubId'        
     }
+    
     stages{
+
+        stage ('Pre Build') {
         steps {
             sh 'cd app'
         }
     }
-    
-    stages{
        stage('Build') {
       steps{
         script {
