@@ -12,13 +12,10 @@ pipeline {
     
     stages{
 
-        stage ('Pre Build') {
-        steps {
-            sh 'cd app'
-        }
     }
        stage('Build') {
       steps{
+          sh "pwd"
         script {
           dockerImage = docker.build(registry + ":$BUILD_NUMBER", "./app/Dockerfile")
         }
