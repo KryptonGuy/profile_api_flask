@@ -1,4 +1,4 @@
-FROM gcr.io/google_appengine/python
+FROM python:3
 
 RUN mkdir -p /home/project/app
 WORKDIR /home/project/app

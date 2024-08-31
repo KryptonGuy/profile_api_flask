@@ -1,5 +1,5 @@
 pipeline {
-    agent {label 'python-alpine'}
+    agent {label 'jenkins-docker'}
     options{
         buildDiscarder(logRotator(numToKeepStr: '5', daysToKeepStr: '5'))
         timestamps()
@@ -11,10 +11,12 @@ pipeline {
     }
     
     stages{
+        
        stage('Build') {
       steps{
+          sh "pwd"
         script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+          dockerImage = docker.build(registry + ":$BUILD_NUMBER", "./app")
         }
       }
     }
